@@ -1,0 +1,28 @@
+{
+  "builders": [
+    {
+      "name": "ubuntu-14.04.amd64.virtualbox",
+      "type": "virtualbox-ovf",
+      "source_path" : "input/packer-ubuntu-14.04.amd64.virtualbox-1411547018.ovf",
+      "ssh_username": "koha",
+      "ssh_password": "secret",
+      "ssh_wait_timeout": "60m", 
+      "shutdown_command": "echo 'koha' | sudo -S -E shutdown -P now "
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'secret' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "echo '%sudo    ALL=(ALL)  NOPASSWD:ALL' >> /etc/sudoers"
+      ] 
+    }, 
+    {
+      "type": "salt-masterless",
+      "local_state_tree": "./salt/states",
+       "local_pillar_roots": "./salt/pillar",
+      "minion_config": "./salt/minion" 
+    }
+  ]
+}
