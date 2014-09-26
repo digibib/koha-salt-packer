@@ -1,3 +1,4 @@
 input/
 output-*
 packer_cache/
+log.txt*

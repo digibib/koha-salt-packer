@@ -2,8 +2,9 @@
 # MYSQL
 ##########
 
-mysql-server:
+install-mysql-server:
   pkg.installed:
+    - name: mysql-server
     - skip_verify: True
 
 mysqlrepl1:
@@ -22,8 +23,9 @@ mysqlrepl2:
     - require:
       - pkg: mysql-server
 
-mysql:
+start-mysql-service:
   service:
+    - name: mysql
     - running
     - require:
       - pkg: mysql-server

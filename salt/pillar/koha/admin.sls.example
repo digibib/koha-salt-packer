@@ -3,7 +3,7 @@
 
 koha:
   instance: name       # NB: instance name should be no more than 11 chars
-  dbhost: 192.168.50.12
+  dbhost: 0.0.0.0
   dbport: 3306
   adminuser: admin
   adminpass: secret
