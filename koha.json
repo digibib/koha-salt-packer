@@ -3,11 +3,15 @@
     {
       "name": "ubuntu-14.04.amd64.virtualbox",
       "type": "virtualbox-ovf",
+      "headless": "false",
       "source_path" : "input/packer-ubuntu-14.04.amd64.virtualbox-1411547018.ovf",
       "ssh_username": "koha",
       "ssh_password": "secret",
       "ssh_wait_timeout": "60m", 
-      "shutdown_command": "echo 'koha' | sudo -S -E shutdown -P now "
+      "shutdown_command": "echo 'koha' | sudo -S -E shutdown -P now ",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--nic2", "hostonly", "--hostonlyadapter2", "vboxnet0"]
+      ]
     }
   ],
   "provisioners": [
@@ -19,9 +23,22 @@
       ] 
     }, 
     {
+      "type": "shell",
+      "execute_command": "echo 'secret' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "echo ' '                           >> /etc/network/interfaces",
+        "echo '#Added manually by packer'   >> /etc/network/interfaces",
+        "echo 'auto eth1'                   >> /etc/network/interfaces",
+        "echo 'iface eth1 inet static'      >> /etc/network/interfaces",
+        "echo '      address 192.168.50.10' >> /etc/network/interfaces",
+        "echo '      netmask 255.255.255.0' >> /etc/network/interfaces",
+        "ifup eth1"
+        ]
+    }, 
+    {
       "type": "salt-masterless",
       "local_state_tree": "./salt/states",
-       "local_pillar_roots": "./salt/pillar",
+      "local_pillar_roots": "./salt/pillar",
       "minion_config": "./salt/minion" 
     }
   ]
