@@ -3,7 +3,8 @@
     {
       "name": "ubuntu-14.04.amd64.virtualbox",
       "type": "virtualbox-ovf",
-      "headless": "false",
+      "vm_name": "koha-ubuntu-14.04.amd64.virtualbox",
+      "headless": "true",
       "source_path" : "input/packer-ubuntu-14.04.amd64.virtualbox-1411547018.ovf",
       "ssh_username": "koha",
       "ssh_password": "secret",
